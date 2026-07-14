@@ -36,5 +36,18 @@ public class TodoMVCReactTests {
             todoPage.pressEnterOnEmptyInput();
             assertEquals(currentTodoCount, todoPage.getTodoCount());
         }
+
+        @Test
+        void shouldNotAddTodoWhenEnterPressedMultipleTimesOnEmptyInput() {
+        int currentTodoCount = todoPage.getTodoCount();
+        
+        todoPage.pressEnterOnEmptyInput();
+        todoPage.pressEnterOnEmptyInput();
+        todoPage.pressEnterOnEmptyInput();
+
+        assertEquals(currentTodoCount, todoPage.getTodoCount());
+
+        System.out.printf("Initial count: %d. New count: %d", currentTodoCount, todoPage.getTodoCount());
+    }
     }
 
