@@ -35,11 +35,17 @@ public class TodoMVCReactPage {
 
         for (WebElement label : labels) {
             if (label.getText().equals(todo)) {
-                System.out.printf("Todo: %s was found", todo);
                 return true;
             }
         }
-        System.out.printf("Todo: %s was not found", todo);
         return false;
+    }
+
+    public int getTodoCount() {
+        return driver.findElements(todoItemLabelsLocator).size();
+    }
+
+    public void pressEnterOnEmptyInput() {
+        driver.findElement(inputBoxLocator).sendKeys(Keys.ENTER);
     }
 }
