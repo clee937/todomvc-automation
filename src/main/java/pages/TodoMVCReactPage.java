@@ -5,6 +5,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TodoMVCReactPage {
@@ -30,15 +31,16 @@ public class TodoMVCReactPage {
 //      System.out.println(currentText);
     }
 
-    public boolean wasItemAdded(String todo) {
+    public List<String> getTodoTexts() {
         List<WebElement> labels = driver.findElements(todoItemLabelsLocator);
 
+        List<String> todoTexts = new ArrayList<>();
+
         for (WebElement label : labels) {
-            if (label.getText().equals(todo)) {
-                return true;
-            }
+            todoTexts.add(label.getText());
         }
-        return false;
+
+        return todoTexts;
     }
 
     public int getTodoCount() {
