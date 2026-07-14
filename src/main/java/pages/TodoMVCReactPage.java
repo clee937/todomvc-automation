@@ -1,0 +1,45 @@
+package pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
+
+public class TodoMVCReactPage {
+    private final WebDriver driver;
+    private final By inputBoxLocator = By.cssSelector("[data-testid='text-input']");
+    private final By todoItemLabelsLocator = By.cssSelector("[data-testid='todo-item-label']");
+    private static final String URL =
+            "https://todomvc.com/examples/react/dist/";
+
+    public TodoMVCReactPage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void open() {
+        driver.get(URL);
+    }
+
+    public void addTodo(String todo) {
+        WebElement inputBox = driver.findElement(inputBoxLocator);
+        inputBox.sendKeys(todo, Keys.ENTER);
+
+//      String currentText = inputBox.getAttribute("value");
+//      System.out.println(currentText);
+    }
+
+    public boolean wasItemAdded(String todo) {
+        List<WebElement> labels = driver.findElements(todoItemLabelsLocator);
+
+        for (WebElement label : labels) {
+            if (label.getText().equals(todo)) {
+                System.out.printf("Todo: %s was found", todo);
+                return true;
+            }
+        }
+        System.out.printf("Todo: %s was not found", todo);
+        return false;
+    }
+}
