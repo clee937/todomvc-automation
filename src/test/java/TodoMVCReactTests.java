@@ -1,12 +1,9 @@
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.WebDriver;
 import pages.TodoMVCReactPage;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -120,20 +117,19 @@ public class TodoMVCReactTests {
             assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
         }
 
-
-//        Emoji input could not be verified through WebDriver sendKeys due to ChromeDriver limitation.
-//        @Test
-//        void shouldSupportEmoji() {
-//            todoPage.addTodo("\uD83D\uDE00");
-//            assertTrue(todoPage.getTodoTexts().contains("\uD83D\uDE00"), "Expected Todo list to contain '\uD83D\uDE00'");
-//        }
+        @Test
+        @Disabled("Blocked by ChromeDriver limitation: sendKeys does not support non-BMP Unicode characters")
+        void shouldSupportEmoji() {
+            todoPage.addTodo("\uD83D\uDE00");
+            assertTrue(todoPage.getTodoTexts().contains("\uD83D\uDE00"), "Expected Todo list to contain '\uD83D\uDE00'");
+        }
 
         @DisplayName("Should edit an existing todo")
         @ParameterizedTest(name = "Should edit {0} to {1}")
         @CsvSource({
                 "Buy milk, Buy eggs",
-                "Buy birthday card, Buy anniversary card",
-                "Book doctors appointment, Book dentist appointment"
+                "東京, 京都",
+                "a, b"
         })
         void shouldEditTodo(String originalTodo, String updatedTodo) {
 
@@ -146,6 +142,32 @@ public class TodoMVCReactTests {
                     "Expected Todo list to contain updated todo: '" + updatedTodo + "' but was " + todoTexts);
             assertFalse(todoTexts.contains(originalTodo),
                     "Expected Todo list not to contain original todo: '" + originalTodo + "'");
+        }
+
+        @Test
+        @Disabled("Known issue: Escape does not cancel editing in TodoMVC React implementation")
+        void shouldCancelEditWhenEscapePressed() {
+            String todo = "Wrap birthday gift";
+            todoPage.addTodo(todo);
+
+            todoPage.startEditingTodoAndPressEscape(todo);
+
+            List<String> todoTexts = todoPage.getTodoTexts();
+
+            assertTrue(todoTexts.contains(todo),
+                    "Expected Todo list to contain original todo after cancelling edit: '" + todo + "'");
+            assertEquals(1, todoTexts.size(),
+                    "Expected Todo list to contain only the original todo");
+        }
+
+        @Test
+        void shouldCompleteTodo() {
+            String todo = "Wrap birthday gift";
+            todoPage.addTodo(todo);
+            todoPage.completeTodo(todo);
+
+            assertTrue(todoPage.isTodoCompleted(todo),
+                    "Expected todo to be completed: " + todo);
         }
 }
 

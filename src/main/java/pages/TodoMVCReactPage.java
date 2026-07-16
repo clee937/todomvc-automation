@@ -37,6 +37,7 @@ public class TodoMVCReactPage {
     }
 
     public List<String> getTodoTexts() {
+
         List<WebElement> labels = driver.findElements(todoItemLabelsLocator);
 
         List<String> todoTexts = new ArrayList<>();
@@ -47,6 +48,7 @@ public class TodoMVCReactPage {
 
         return todoTexts;
     }
+
 
     public int getTodoCount() {
         return driver.findElements(todoItemLabelsLocator).size();
@@ -74,5 +76,37 @@ public class TodoMVCReactPage {
                 newTodo,
                 Keys.ENTER
         );
+    }
+
+    public void startEditingTodoAndPressEscape(String existingTodo) {
+        WebElement todoText = driver.findElement(
+                By.xpath("//label[text()='" + existingTodo + "']")
+        );
+
+        Actions actions = new Actions(driver);
+        actions.doubleClick(todoText).perform();
+
+        WebElement editInput = new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.visibilityOfElementLocated(editInputLocator));
+
+        editInput.sendKeys(Keys.ESCAPE);
+    }
+
+    public void completeTodo(String todo) {
+        WebElement todoItem = driver.findElement(
+                By.xpath("//label[text()='" + todo + "']/ancestor::li")
+        );
+
+        todoItem.findElement(By.cssSelector(".toggle")).click();
+    }
+
+    public boolean isTodoCompleted(String todo) {
+        WebElement todoItem = driver.findElement(
+                By.xpath("//label[text()='" + todo + "']/ancestor::li")
+        );
+
+        String cssClasses = todoItem.getAttribute("class");
+
+        return cssClasses != null && cssClasses.contains("completed");
     }
 }
