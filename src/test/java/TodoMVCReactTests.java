@@ -128,20 +128,22 @@ public class TodoMVCReactTests {
 //            assertTrue(todoPage.getTodoTexts().contains("\uD83D\uDE00"), "Expected Todo list to contain '\uD83D\uDE00'");
 //        }
 
-        @Test
-        void shouldEditTodo() {
-
-            String originalTodo = "Buy birthday card";
-            String updatedTodo = "Buy anniversary card";
+        @DisplayName("Should edit an existing todo")
+        @ParameterizedTest(name = "Should edit {0} to {1}")
+        @CsvSource({
+                "Buy milk, Buy eggs",
+                "Buy birthday card, Buy anniversary card",
+                "Book doctors appointment, Book dentist appointment"
+        })
+        void shouldEditTodo(String originalTodo, String updatedTodo) {
 
             todoPage.addTodo(originalTodo);
             todoPage.editTodo(originalTodo, updatedTodo);
 
             List<String> todoTexts = todoPage.getTodoTexts();
 
-//            assertTrue(todoTexts.contains(updatedTodo),
-//                    "Expected Todo list to contain updated todo: '" + updatedTodo + "' but was " + todoTexts);
-
+            assertTrue(todoTexts.contains(updatedTodo),
+                    "Expected Todo list to contain updated todo: '" + updatedTodo + "' but was " + todoTexts);
             assertFalse(todoTexts.contains(originalTodo),
                     "Expected Todo list not to contain original todo: '" + originalTodo + "'");
         }
