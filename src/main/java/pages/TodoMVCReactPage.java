@@ -40,13 +40,16 @@ public class TodoMVCReactPage {
 
         List<WebElement> labels = driver.findElements(todoItemLabelsLocator);
 
-        List<String> todoTexts = new ArrayList<>();
+        return labels.stream()
+                .map(WebElement::getText)
+                .toList();
 
-        for (WebElement label : labels) {
-            todoTexts.add(label.getText());
-        }
-
-        return todoTexts;
+//        List<String> todoTexts = new ArrayList<>();
+//
+//        for (WebElement label : labels) {
+//            todoTexts.add(label.getText());
+//        }
+//        return todoTexts;
     }
 
 
@@ -116,5 +119,17 @@ public class TodoMVCReactPage {
         String cssClasses = todoItem.getAttribute("class");
 
         return cssClasses != null && cssClasses.contains("completed");
+    }
+
+    public void deleteTodo(String todo) {
+        WebElement todoItem = driver.findElement(
+                By.xpath("//label[text()='" + todo + "']/ancestor::li")
+        );
+
+        Actions actions = new Actions(driver);
+        // hover over the element
+        actions.moveToElement(todoItem).perform();
+
+        todoItem.findElement(By.cssSelector(".destroy")).click();
     }
 }

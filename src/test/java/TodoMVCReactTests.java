@@ -183,5 +183,16 @@ public class TodoMVCReactTests {
             assertFalse(todoPage.isTodoCompleted(todo),
                     "Expected todo to be incomplete: " + todo);
         }
+
+        @Test
+        void shouldDeleteTodo() {
+            String todo = "Write birthday card";
+            todoPage.addTodo(todo);
+            todoPage.deleteTodo(todo);
+            List<String> todoTextsAfterDeletion = todoPage.getTodoTexts();
+
+            assertFalse(todoTextsAfterDeletion.contains(todo),
+                    "Expected Todo list not to contain deleted todo: '" + todo + "'");
+        }
 }
 
