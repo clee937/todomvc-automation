@@ -169,5 +169,19 @@ public class TodoMVCReactTests {
             assertTrue(todoPage.isTodoCompleted(todo),
                     "Expected todo to be completed: " + todo);
         }
+
+        @Test
+        void shouldMarkTodoAsIncomplete() {
+            String todo = "Wrap birthday gift";
+            todoPage.addTodo(todo);
+
+            assertFalse(todoPage.isTodoCompleted(todo), "The todo: '" + todo + "' is already complete and shouldn't be.");
+
+            todoPage.completeTodo(todo);
+            todoPage.uncompleteTodo(todo);
+
+            assertFalse(todoPage.isTodoCompleted(todo),
+                    "Expected todo to be incomplete: " + todo);
+        }
 }
 

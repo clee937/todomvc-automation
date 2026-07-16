@@ -100,6 +100,14 @@ public class TodoMVCReactPage {
         todoItem.findElement(By.cssSelector(".toggle")).click();
     }
 
+    public void uncompleteTodo(String todo) {
+        WebElement todoItem = driver.findElement(
+                By.xpath("//label[text()='" + todo + "']/ancestor::li")
+        );
+
+        todoItem.findElement(By.cssSelector(".toggle")).click();
+    }
+
     public boolean isTodoCompleted(String todo) {
         WebElement todoItem = driver.findElement(
                 By.xpath("//label[text()='" + todo + "']/ancestor::li")
