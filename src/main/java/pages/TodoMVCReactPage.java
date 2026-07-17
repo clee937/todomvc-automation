@@ -1,5 +1,4 @@
 package pages;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -9,10 +8,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TodoMVCReactPage {
+    // ---------- Locators ----------
+
     private final WebDriver driver;
     private final By inputBoxLocator = By.cssSelector("[data-testid='text-input']");
     private final By todoItemLabelsLocator = By.cssSelector("[data-testid='todo-item-label']");
@@ -20,9 +20,13 @@ public class TodoMVCReactPage {
     private static final String URL =
             "https://todomvc.com/examples/react/dist/";
 
+    // ---------- Constructor ----------
+
     public TodoMVCReactPage(WebDriver driver) {
         this.driver = driver;
     }
+
+    // ---------- Actions ----------
 
     public void open() {
         driver.get(URL);
@@ -34,27 +38,6 @@ public class TodoMVCReactPage {
 
 //      String currentText = inputBox.getAttribute("value");
 //      System.out.println(currentText);
-    }
-
-    public List<String> getTodoTexts() {
-
-        List<WebElement> labels = driver.findElements(todoItemLabelsLocator);
-
-        return labels.stream()
-                .map(WebElement::getText)
-                .toList();
-
-//        List<String> todoTexts = new ArrayList<>();
-//
-//        for (WebElement label : labels) {
-//            todoTexts.add(label.getText());
-//        }
-//        return todoTexts;
-    }
-
-
-    public int getTodoCount() {
-        return driver.findElements(todoItemLabelsLocator).size();
     }
 
     public void pressEnterOnEmptyInput() {
@@ -96,40 +79,62 @@ public class TodoMVCReactPage {
     }
 
     public void completeTodo(String todo) {
-        WebElement todoItem = driver.findElement(
-                By.xpath("//label[text()='" + todo + "']/ancestor::li")
-        );
-
+        WebElement todoItem = getTodoItem(todo);
         todoItem.findElement(By.cssSelector(".toggle")).click();
     }
 
     public void uncompleteTodo(String todo) {
-        WebElement todoItem = driver.findElement(
-                By.xpath("//label[text()='" + todo + "']/ancestor::li")
-        );
-
+        WebElement todoItem = getTodoItem(todo);
         todoItem.findElement(By.cssSelector(".toggle")).click();
     }
 
-    public boolean isTodoCompleted(String todo) {
-        WebElement todoItem = driver.findElement(
-                By.xpath("//label[text()='" + todo + "']/ancestor::li")
-        );
-
-        String cssClasses = todoItem.getAttribute("class");
-
-        return cssClasses != null && cssClasses.contains("completed");
-    }
-
     public void deleteTodo(String todo) {
-        WebElement todoItem = driver.findElement(
-                By.xpath("//label[text()='" + todo + "']/ancestor::li")
-        );
+        WebElement todoItem = getTodoItem(todo);
 
         Actions actions = new Actions(driver);
         // hover over the element
         actions.moveToElement(todoItem).perform();
 
         todoItem.findElement(By.cssSelector(".destroy")).click();
+
+    }
+
+    // ---------- Assertions / Queries ----------
+
+    public List<String> getTodoTexts() {
+
+        List<WebElement> labels = driver.findElements(todoItemLabelsLocator);
+
+        return labels.stream()
+                .map(WebElement::getText)
+                .toList();
+
+//        List<String> todoTexts = new ArrayList<>();
+//
+//        for (WebElement label : labels) {
+//            todoTexts.add(label.getText());
+//        }
+//        return todoTexts;
+    }
+
+    public int getTodoCount() {
+//        return driver.findElements(todoItemLabelsLocator).size();
+        return getTodoTexts().size();
+    }
+
+    public boolean isTodoCompleted(String todo) {
+        WebElement todoItem = getTodoItem(todo);
+
+        String cssClasses = todoItem.getAttribute("class");
+
+        return cssClasses != null && cssClasses.contains("completed");
+    }
+
+    // ---------- Helpers ----------
+
+    private WebElement getTodoItem(String todo) {
+        return driver.findElement(
+                By.xpath("//label[text()='" + todo + "']/ancestor::li")
+        );
     }
 }
