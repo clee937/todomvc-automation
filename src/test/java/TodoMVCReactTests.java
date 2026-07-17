@@ -27,161 +27,174 @@ public class TodoMVCReactTests {
             driver.quit();
         }
 
-        @Test
-        void shouldAddTodoItem() {
-            todoPage.addTodo("Buy eggs");
-            assertTrue(todoPage.getTodoTexts().contains("Buy eggs"), "Expected Todo list to contain 'Buy eggs'");
-        }
+        @Nested
+        @DisplayName("Adding todos")
+        class AddingTodos {
+            @Test
+            void shouldAddTodoItem() {
+                todoPage.addTodo("Buy eggs");
+                assertTrue(todoPage.getTodoTexts().contains("Buy eggs"), "Expected Todo list to contain 'Buy eggs'");
+            }
 
-        @Test
-        void shouldNotAddEmptyTodo() {
-            int currentTodoCount = todoPage.getTodoCount();
-            todoPage.pressEnterOnEmptyInput();
-            assertEquals(currentTodoCount, todoPage.getTodoCount(), "Pressing Enter on an empty input should not create a new todo");
-        }
+            @Test
+            void shouldNotAddEmptyTodo() {
+                int currentTodoCount = todoPage.getTodoCount();
+                todoPage.pressEnterOnEmptyInput();
+                assertEquals(currentTodoCount, todoPage.getTodoCount(), "Pressing Enter on an empty input should not create a new todo");
+            }
 
-        @Test
-        void shouldNotAddTodoWhenEnterPressedMultipleTimesOnEmptyInput() {
-            int currentTodoCount = todoPage.getTodoCount();
+            @Test
+            void shouldNotAddTodoWhenPressingEnterMultipleTimesOnEmptyInput() {
+                int currentTodoCount = todoPage.getTodoCount();
 
-            todoPage.pressEnterOnEmptyInput();
-            todoPage.pressEnterOnEmptyInput();
-            todoPage.pressEnterOnEmptyInput();
+                todoPage.pressEnterOnEmptyInput();
+                todoPage.pressEnterOnEmptyInput();
+                todoPage.pressEnterOnEmptyInput();
 
-            assertEquals(currentTodoCount, todoPage.getTodoCount(), "Pressing Enter on an empty input should not create a new todo");
-    }
+                assertEquals(currentTodoCount, todoPage.getTodoCount(), "Pressing Enter on an empty input should not create a new todo");
+            }
 
-        @Test
-        void shouldNotAddEmptyTodoAfterExistingTodo() {
-            todoPage.addTodo("Buy eggs");
+            @Test
+            void shouldNotAddEmptyTodoAfterExistingTodo() {
+                todoPage.addTodo("Buy eggs");
 
-            int currentTodoCount = todoPage.getTodoCount();
-            todoPage.pressEnterOnEmptyInput();
+                int currentTodoCount = todoPage.getTodoCount();
+                todoPage.pressEnterOnEmptyInput();
 
-            assertEquals(currentTodoCount, todoPage.getTodoCount(), "Pressing Enter on an empty input should not create an additional todo");
+                assertEquals(currentTodoCount, todoPage.getTodoCount(), "Pressing Enter on an empty input should not create an additional todo");
 
-            System.out.printf("Current count: %d, New count: %d", currentTodoCount, todoPage.getTodoCount());
-        }
+                System.out.printf("Current count: %d, New count: %d", currentTodoCount, todoPage.getTodoCount());
+            }
 
-//      Practising individual parameterized tests with @ValueSource. Good for mapping to requirements/spec.
-        @DisplayName("Should accept single character todo text")
-        @ParameterizedTest(name = "Should accept: \"{0}\"")
-        @ValueSource(strings = {"a", "5", "£"})
-        void shouldAcceptSingleCharacterTodoText(String todo) {
-            todoPage.addTodo(todo);
-            assertTrue(todoPage.getTodoTexts().contains(todo));
-        }
+            //      Practising individual parameterized tests with @ValueSource. Good for mapping to requirements/spec.
+            @DisplayName("Should accept single character todo text")
+            @ParameterizedTest(name = "Should accept: \"{0}\"")
+            @ValueSource(strings = {"a", "5", "£"})
+            void shouldAcceptSingleCharacterTodoText(String todo) {
+                todoPage.addTodo(todo);
+                assertTrue(todoPage.getTodoTexts().contains(todo));
+            }
 
-        @DisplayName("Should accept punctuation")
-        @ParameterizedTest(name = "Should accept: \"{0}\"")
-        @ValueSource(strings = {"!", ".", "?"})
-        void shouldAcceptPunctuation(String todo) {
-            todoPage.addTodo(todo);
-            assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
-        }
+            @DisplayName("Should accept punctuation")
+            @ParameterizedTest(name = "Should accept: \"{0}\"")
+            @ValueSource(strings = {"!", ".", "?"})
+            void shouldAcceptPunctuation(String todo) {
+                todoPage.addTodo(todo);
+                assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+            }
 
-        @DisplayName("Should accept numbers")
-        @ParameterizedTest(name = "Should accept: \"{0}\"")
-        @ValueSource(strings = {"0", "1", "10"})
-        void shouldAcceptNumbers(String todo) {
-            todoPage.addTodo(todo);
-            assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
-        }
+            @DisplayName("Should accept numbers")
+            @ParameterizedTest(name = "Should accept: \"{0}\"")
+            @ValueSource(strings = {"0", "1", "10"})
+            void shouldAcceptNumbers(String todo) {
+                todoPage.addTodo(todo);
+                assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+            }
 
-        @DisplayName("Should accept accented characters")
-        @ParameterizedTest(name = "Should accept: \"{0}\"")
-        @ValueSource(strings = {"é", "ñ", "ô"})
-        void shouldAcceptAccentedCharacters(String todo) {
-            todoPage.addTodo(todo);
-            assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
-        }
+            @DisplayName("Should accept accented characters")
+            @ParameterizedTest(name = "Should accept: \"{0}\"")
+            @ValueSource(strings = {"é", "ñ", "ô"})
+            void shouldAcceptAccentedCharacters(String todo) {
+                todoPage.addTodo(todo);
+                assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+            }
 
-        @DisplayName("Should accept non-Latin characters")
-        @ParameterizedTest(name = "Should accept: \"{0}\"")
-        @ValueSource(strings = {"東京", "مرحبا", "Γειά", "안녕"})
-        void shouldAcceptNonLatinCharacters(String todo) {
-            todoPage.addTodo(todo);
-            assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
-        }
+            @DisplayName("Should accept non-Latin characters")
+            @ParameterizedTest(name = "Should accept: \"{0}\"")
+            @ValueSource(strings = {"東京", "مرحبا", "Γειά", "안녕"})
+            void shouldAcceptNonLatinCharacters(String todo) {
+                todoPage.addTodo(todo);
+                assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+            }
 
-//      Practising data-driven parameterized test that groups several valid input types together with @CsvSource
-        @DisplayName("Test input validation")
-        @ParameterizedTest(name = "Should add todo: {0} - {1}")
-        @CsvSource({"a, Single character",
+            //      Practising data-driven parameterized test that groups several valid input types together with @CsvSource
+            @DisplayName("Test input validation")
+            @ParameterizedTest(name = "Should add todo: {0} - {1}")
+            @CsvSource({"a, Single character",
                     "!, Punctuation mark",
                     "3, Number",
                     "é, Accented character",
                     "東京, Non-Latin characters"})
-        public void shouldAcceptValidTodoText(String todo, String description) {
-            todoPage.addTodo(todo);
-            assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+            public void shouldAcceptValidTodoText(String todo, String description) {
+                todoPage.addTodo(todo);
+                assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+            }
+
+            @Test
+            @Disabled("Blocked by ChromeDriver limitation: sendKeys does not support non-BMP Unicode characters")
+            void shouldSupportEmoji() {
+                todoPage.addTodo("\uD83D\uDE00");
+                assertTrue(todoPage.getTodoTexts().contains("\uD83D\uDE00"), "Expected Todo list to contain '\uD83D\uDE00'");
+            }
+
         }
 
-        @Test
-        @Disabled("Blocked by ChromeDriver limitation: sendKeys does not support non-BMP Unicode characters")
-        void shouldSupportEmoji() {
-            todoPage.addTodo("\uD83D\uDE00");
-            assertTrue(todoPage.getTodoTexts().contains("\uD83D\uDE00"), "Expected Todo list to contain '\uD83D\uDE00'");
+        @Nested
+        @DisplayName("Editing todos")
+        class EditingTodos {
+            @DisplayName("Should edit an existing todo")
+            @ParameterizedTest(name = "Should edit {0} to {1}")
+            @CsvSource({
+                    "Buy milk, Buy eggs",
+                    "東京, 京都",
+                    "a, b"
+            })
+            void shouldEditTodo(String originalTodo, String updatedTodo) {
+
+                todoPage.addTodo(originalTodo);
+                todoPage.editTodo(originalTodo, updatedTodo);
+
+                List<String> todoTexts = todoPage.getTodoTexts();
+
+                assertTrue(todoTexts.contains(updatedTodo),
+                        "Expected Todo list to contain updated todo: '" + updatedTodo + "' but was " + todoTexts);
+                assertFalse(todoTexts.contains(originalTodo),
+                        "Expected Todo list not to contain original todo: '" + originalTodo + "'");
+            }
+
+            @Test
+            @Disabled("Known issue: Escape does not cancel editing in TodoMVC React implementation")
+            void shouldCancelEditWhenEscapePressed() {
+                String todo = "Wrap birthday gift";
+                todoPage.addTodo(todo);
+
+                todoPage.startEditingTodoAndPressEscape(todo);
+
+                List<String> todoTexts = todoPage.getTodoTexts();
+
+                assertTrue(todoTexts.contains(todo),
+                        "Expected Todo list to contain original todo after cancelling edit: '" + todo + "'");
+                assertEquals(1, todoTexts.size(),
+                        "Expected Todo list to contain only the original todo");
+            }
         }
 
-        @DisplayName("Should edit an existing todo")
-        @ParameterizedTest(name = "Should edit {0} to {1}")
-        @CsvSource({
-                "Buy milk, Buy eggs",
-                "東京, 京都",
-                "a, b"
-        })
-        void shouldEditTodo(String originalTodo, String updatedTodo) {
+        @Nested
+        @DisplayName("Completing todos")
+        class CompletingTodos {
+            @Test
+            void shouldCompleteTodo() {
+                String todo = "Wrap birthday gift";
+                todoPage.addTodo(todo);
+                todoPage.completeTodo(todo);
 
-            todoPage.addTodo(originalTodo);
-            todoPage.editTodo(originalTodo, updatedTodo);
+                assertTrue(todoPage.isTodoCompleted(todo),
+                        "Expected todo to be completed: " + todo);
+            }
 
-            List<String> todoTexts = todoPage.getTodoTexts();
+            @Test
+            void shouldMarkTodoAsIncomplete() {
+                String todo = "Wrap birthday gift";
+                todoPage.addTodo(todo);
 
-            assertTrue(todoTexts.contains(updatedTodo),
-                    "Expected Todo list to contain updated todo: '" + updatedTodo + "' but was " + todoTexts);
-            assertFalse(todoTexts.contains(originalTodo),
-                    "Expected Todo list not to contain original todo: '" + originalTodo + "'");
-        }
+                assertFalse(todoPage.isTodoCompleted(todo), "The todo: '" + todo + "' is already complete and shouldn't be.");
 
-        @Test
-        @Disabled("Known issue: Escape does not cancel editing in TodoMVC React implementation")
-        void shouldCancelEditWhenEscapePressed() {
-            String todo = "Wrap birthday gift";
-            todoPage.addTodo(todo);
+                todoPage.completeTodo(todo);
+                todoPage.uncompleteTodo(todo);
 
-            todoPage.startEditingTodoAndPressEscape(todo);
-
-            List<String> todoTexts = todoPage.getTodoTexts();
-
-            assertTrue(todoTexts.contains(todo),
-                    "Expected Todo list to contain original todo after cancelling edit: '" + todo + "'");
-            assertEquals(1, todoTexts.size(),
-                    "Expected Todo list to contain only the original todo");
-        }
-
-        @Test
-        void shouldCompleteTodo() {
-            String todo = "Wrap birthday gift";
-            todoPage.addTodo(todo);
-            todoPage.completeTodo(todo);
-
-            assertTrue(todoPage.isTodoCompleted(todo),
-                    "Expected todo to be completed: " + todo);
-        }
-
-        @Test
-        void shouldMarkTodoAsIncomplete() {
-            String todo = "Wrap birthday gift";
-            todoPage.addTodo(todo);
-
-            assertFalse(todoPage.isTodoCompleted(todo), "The todo: '" + todo + "' is already complete and shouldn't be.");
-
-            todoPage.completeTodo(todo);
-            todoPage.uncompleteTodo(todo);
-
-            assertFalse(todoPage.isTodoCompleted(todo),
-                    "Expected todo to be incomplete: " + todo);
+                assertFalse(todoPage.isTodoCompleted(todo),
+                        "Expected todo to be incomplete: " + todo);
+            }
         }
 
         @Test
