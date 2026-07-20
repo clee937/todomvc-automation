@@ -152,6 +152,8 @@ public class TodoMVCReactTests {
                         "Expected Todo list to contain updated todo: '" + updatedTodo + "' but was " + todoTexts);
                 assertFalse(todoTexts.contains(originalTodo),
                         "Expected Todo list not to contain original todo: '" + originalTodo + "'");
+                assertEquals(1, todoTexts.size(),
+                        "Expected Todo list to contain only the updated todo");
             }
 
             @Test
@@ -199,15 +201,37 @@ public class TodoMVCReactTests {
             }
         }
 
-        @Test
-        void shouldDeleteTodo() {
-            String todo = "Write birthday card";
-            todoPage.addTodo(todo);
-            todoPage.deleteTodo(todo);
-            List<String> todoTextsAfterDeletion = todoPage.getTodoTexts();
+        @Nested
+        @DisplayName("Deleting todos")
+        class DeletingTodos {
+            @Test
+            void shouldDeleteTodo() {
+                String todo = "Write birthday card";
+                todoPage.addTodo(todo);
+                todoPage.deleteTodo(todo);
+                List<String> todoTextsAfterDeletion = todoPage.getTodoTexts();
 
-            assertFalse(todoTextsAfterDeletion.contains(todo),
-                    "Expected Todo list not to contain deleted todo: '" + todo + "'");
+                assertFalse(todoTextsAfterDeletion.contains(todo),
+                        "Expected Todo list not to contain deleted todo: '" + todo + "'");
+                assertEquals(0, todoTextsAfterDeletion.size(),
+                        "Expected Todo list to contain no todos after deletion");
+            }
+
+            @Test
+            void shouldDeleteOnlySelectedTodo() {
+                String firstTodo = "Buy milk";
+                String secondTodo = "Buy birthday card";
+
+                todoPage.addTodo(firstTodo);
+                todoPage.addTodo(secondTodo);
+
+                todoPage.deleteTodo(firstTodo);
+
+                List<String> todoTextsAfterDeletion = todoPage.getTodoTexts();
+                assertFalse(todoTextsAfterDeletion.contains(firstTodo), "Expected deleted todo to be removed from the list");
+                assertEquals(1, todoTextsAfterDeletion.size(), "Expected exactly one todo to remain after deletion");
+                assertTrue(todoTextsAfterDeletion.contains(secondTodo), "Expected remaining todo to be '" + secondTodo + "'");
+            }
         }
 }
 
