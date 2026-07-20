@@ -71,4 +71,18 @@ public class TodoMVCUserFlowTests {
         assertTrue(todoTexts.contains(firstTodo),
                 "Expected Todo list to contain remaining todo: '" + firstTodo + "'");
     }
+
+    @Test
+    void shouldToggleCompletionBeforeDeletingTodo() {
+        String todo = "Book dentist appointment";
+
+        todoPage.addTodo(todo);
+        todoPage.completeTodo(todo);
+        todoPage.uncompleteTodo(todo);
+        todoPage.completeTodo(todo);
+        todoPage.deleteTodo(todo);
+
+        assertFalse(todoPage.getTodoTexts().contains(todo),
+                "Expected todo '" + todo + "' to be removed after deletion");
+    }
 }
