@@ -9,8 +9,7 @@ import pages.TodoMVCReactPage;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TodoMVCUserFlowTests {
     private WebDriver driver;
@@ -47,5 +46,29 @@ public class TodoMVCUserFlowTests {
         List<String> todoTexts = todoPage.getTodoTexts();
 
         assertTrue(todoTexts.isEmpty(), "Expected Todo list to contain no todos after deletion");
+    }
+
+    @Test
+    void shouldManageMultipleTodoItems() {
+        String firstTodo = "Wash car";
+        String secondTodo = "Call Grandma";
+        String updatedTodo = "Call Grandpa";
+
+        todoPage.addTodo(firstTodo);
+        todoPage.addTodo(secondTodo);
+
+        todoPage.completeTodo(firstTodo);
+        assertTrue(todoPage.isTodoCompleted(firstTodo));
+
+        todoPage.editTodo(secondTodo, updatedTodo);
+        assertTrue(todoPage.getTodoTexts().contains(updatedTodo));
+
+        todoPage.deleteTodo(updatedTodo);
+        List<String> todoTexts = todoPage.getTodoTexts();
+
+        assertFalse(todoTexts.contains(updatedTodo), "Expected Todo list not to contain '" + updatedTodo + "' after deletion");
+        assertEquals(1, todoTexts.size(), "Expected Todo list to contain only the first todo after deletion");
+        assertTrue(todoTexts.contains(firstTodo),
+                "Expected Todo list to contain remaining todo: '" + firstTodo + "'");
     }
 }
