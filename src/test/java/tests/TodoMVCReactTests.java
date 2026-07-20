@@ -174,7 +174,7 @@ public class TodoMVCReactTests {
         }
 
         @Nested
-        @DisplayName("Completing todos")
+        @DisplayName("Managing todo completion")
         class CompletingTodos {
             @Test
             void shouldCompleteTodo() {

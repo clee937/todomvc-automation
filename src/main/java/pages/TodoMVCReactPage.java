@@ -17,6 +17,8 @@ public class TodoMVCReactPage {
     private final By inputBoxLocator = By.cssSelector("[data-testid='text-input']");
     private final By todoItemLabelsLocator = By.cssSelector("[data-testid='todo-item-label']");
     private final By editInputLocator = By.cssSelector("input.edit");
+    private final By todoCompletionToggleLocator = By.cssSelector("[data-testid='todo-item-toggle']");
+    private final By toggleAllCompletionLocator = By.id("toggle-all");
     private static final String URL =
             "https://todomvc.com/examples/react/dist/";
 
@@ -80,12 +82,12 @@ public class TodoMVCReactPage {
 
     public void completeTodo(String todo) {
         WebElement todoItem = getTodoItem(todo);
-        todoItem.findElement(By.cssSelector(".toggle")).click();
+        todoItem.findElement(todoCompletionToggleLocator).click();
     }
 
     public void uncompleteTodo(String todo) {
         WebElement todoItem = getTodoItem(todo);
-        todoItem.findElement(By.cssSelector(".toggle")).click();
+        todoItem.findElement(todoCompletionToggleLocator).click();
     }
 
     public void deleteTodo(String todo) {
