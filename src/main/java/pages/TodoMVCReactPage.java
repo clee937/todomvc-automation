@@ -81,13 +81,11 @@ public class TodoMVCReactPage {
     }
 
     public void completeTodo(String todo) {
-        WebElement todoItem = getTodoItem(todo);
-        todoItem.findElement(todoCompletionToggleLocator).click();
+        clickTodoCompletionToggle(todo);
     }
 
     public void uncompleteTodo(String todo) {
-        WebElement todoItem = getTodoItem(todo);
-        todoItem.findElement(todoCompletionToggleLocator).click();
+        clickTodoCompletionToggle(todo);
     }
 
     public void completeAllTodos() {
@@ -143,5 +141,11 @@ public class TodoMVCReactPage {
         return driver.findElement(
                 By.xpath("//label[text()='" + todo + "']/ancestor::li")
         );
+    }
+
+    private void clickTodoCompletionToggle(String todo) {
+        getTodoItem(todo)
+                .findElement(todoCompletionToggleLocator)
+                .click();
     }
 }
