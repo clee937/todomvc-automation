@@ -211,11 +211,30 @@ public class TodoMVCReactTests {
                 todoPage.addTodo(thirdTodo);
 
                 todoPage.completeTodo(firstTodo);
-                todoPage.completeAllTodos();
+                todoPage.toggleAllTodoCompletion();
 
                 for (String todo: todoPage.getTodoTexts()) {
                     assertTrue(todoPage.isTodoCompleted(todo),
                             "Expected todo '" + todo + "' to be completed");
+                }
+            }
+
+            @Test
+            void shouldMarkAllTodosIncomplete() {
+                String firstTodo = "Wrap birthday gift";
+                String secondTodo = "Order water filters";
+                String thirdTodo = "Book MOT";
+
+                todoPage.addTodo(firstTodo);
+                todoPage.addTodo(secondTodo);
+                todoPage.addTodo(thirdTodo);
+
+                todoPage.toggleAllTodoCompletion();
+                todoPage.toggleAllTodoCompletion();
+
+                for (String todo : todoPage.getTodoTexts()) {
+                    assertFalse(todoPage.isTodoCompleted(todo),
+                            "Expected todo '" + todo + "' to be incomplete");
                 }
             }
         }
