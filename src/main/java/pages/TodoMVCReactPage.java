@@ -79,7 +79,7 @@ public class TodoMVCReactPage {
         clickTodoCompletionToggle(todo);
     }
 
-    public void completeAllTodos() {
+    public void toggleAllTodoCompletion() {
         WebElement todoCompletionToggle = driver.findElement(toggleAllCompletionLocator);
         todoCompletionToggle.click();
     }
