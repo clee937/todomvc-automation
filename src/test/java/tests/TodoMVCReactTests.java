@@ -5,6 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import pages.TodoMVCReactPage;
 
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -198,6 +199,25 @@ public class TodoMVCReactTests {
 
                 assertFalse(todoPage.isTodoCompleted(todo),
                         "Expected todo to be incomplete: " + todo);
+            }
+
+            @Test
+            void shouldCompleteAllTodos() {
+                String firstTodo = "Wrap birthday gift";
+                String secondTodo = "Order water filters";
+                String thirdTodo = "Book MOT";
+
+                todoPage.addTodo(firstTodo);
+                todoPage.addTodo(secondTodo);
+                todoPage.addTodo(thirdTodo);
+
+                todoPage.completeTodo(firstTodo);
+                todoPage.completeAllTodos();
+
+                for (String todo: todoPage.getTodoTexts()) {
+                    assertTrue(todoPage.isTodoCompleted(todo),
+                            "Expected todo '" + todo + "' to be completed");
+                }
             }
         }
 

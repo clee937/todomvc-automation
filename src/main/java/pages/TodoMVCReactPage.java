@@ -90,6 +90,11 @@ public class TodoMVCReactPage {
         todoItem.findElement(todoCompletionToggleLocator).click();
     }
 
+    public void completeAllTodos() {
+        WebElement todoCompletionToggle = driver.findElement(toggleAllCompletionLocator);
+        todoCompletionToggle.click();
+    }
+
     public void deleteTodo(String todo) {
         WebElement todoItem = getTodoItem(todo);
 
