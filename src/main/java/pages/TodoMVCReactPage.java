@@ -19,6 +19,9 @@ public class TodoMVCReactPage {
     private final By editInputLocator = By.cssSelector("input.edit");
     private final By todoCompletionToggleLocator = By.cssSelector("[data-testid='todo-item-toggle']");
     private final By toggleAllCompletionLocator = By.id("toggle-all");
+    private final By completedFilterLocator = By.cssSelector("a[href='#/completed']");
+    private final By activeFilterLocator = By.cssSelector("a[href='#/active']");
+    private final By allFilterLocator = By.cssSelector("a[href='#/']");
     private static final String URL =
             "https://todomvc.com/examples/react/dist/";
 
@@ -93,6 +96,18 @@ public class TodoMVCReactPage {
 
         todoItem.findElement(By.cssSelector(".destroy")).click();
 
+    }
+
+    public void filterByCompleted() {
+        driver.findElement(completedFilterLocator).click();
+    }
+
+    public void filterByActive() {
+        driver.findElement(activeFilterLocator).click();
+    }
+
+    public void filterByAll() {
+        driver.findElement(allFilterLocator).click();
     }
 
     // ---------- Assertions / Queries ----------

@@ -35,14 +35,16 @@ public class TodoMVCReactTests {
             @Test
             void shouldAddTodoItem() {
                 todoPage.addTodo("Buy eggs");
-                assertTrue(todoPage.getTodoTexts().contains("Buy eggs"), "Expected Todo list to contain 'Buy eggs'");
+                assertTrue(todoPage.getTodoTexts().contains("Buy eggs"),
+                        "Expected Todo list to contain 'Buy eggs'");
             }
 
             @Test
             void shouldNotAddEmptyTodo() {
                 int currentTodoCount = todoPage.getTodoCount();
                 todoPage.pressEnterOnEmptyInput();
-                assertEquals(currentTodoCount, todoPage.getTodoCount(), "Pressing Enter on an empty input should not create a new todo");
+                assertEquals(currentTodoCount, todoPage.getTodoCount(),
+                        "Pressing Enter on an empty input should not create a new todo");
             }
 
             @Test
@@ -53,7 +55,8 @@ public class TodoMVCReactTests {
                 todoPage.pressEnterOnEmptyInput();
                 todoPage.pressEnterOnEmptyInput();
 
-                assertEquals(currentTodoCount, todoPage.getTodoCount(), "Pressing Enter on an empty input should not create a new todo");
+                assertEquals(currentTodoCount, todoPage.getTodoCount(),
+                        "Pressing Enter on an empty input should not create a new todo");
             }
 
             @Test
@@ -63,7 +66,8 @@ public class TodoMVCReactTests {
                 int currentTodoCount = todoPage.getTodoCount();
                 todoPage.pressEnterOnEmptyInput();
 
-                assertEquals(currentTodoCount, todoPage.getTodoCount(), "Pressing Enter on an empty input should not create an additional todo");
+                assertEquals(currentTodoCount, todoPage.getTodoCount(),
+                        "Pressing Enter on an empty input should not create an additional todo");
 
                 System.out.printf("Current count: %d, New count: %d", currentTodoCount, todoPage.getTodoCount());
             }
@@ -82,7 +86,8 @@ public class TodoMVCReactTests {
             @ValueSource(strings = {"!", ".", "?"})
             void shouldAcceptPunctuation(String todo) {
                 todoPage.addTodo(todo);
-                assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+                assertTrue(todoPage.getTodoTexts().contains(todo),
+                        "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
             }
 
             @DisplayName("Should accept numbers")
@@ -90,7 +95,8 @@ public class TodoMVCReactTests {
             @ValueSource(strings = {"0", "1", "10"})
             void shouldAcceptNumbers(String todo) {
                 todoPage.addTodo(todo);
-                assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+                assertTrue(todoPage.getTodoTexts().contains(todo),
+                        "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
             }
 
             @DisplayName("Should accept accented characters")
@@ -98,7 +104,8 @@ public class TodoMVCReactTests {
             @ValueSource(strings = {"é", "ñ", "ô"})
             void shouldAcceptAccentedCharacters(String todo) {
                 todoPage.addTodo(todo);
-                assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+                assertTrue(todoPage.getTodoTexts().contains(todo),
+                        "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
             }
 
             @DisplayName("Should accept non-Latin characters")
@@ -106,7 +113,8 @@ public class TodoMVCReactTests {
             @ValueSource(strings = {"東京", "مرحبا", "Γειά", "안녕"})
             void shouldAcceptNonLatinCharacters(String todo) {
                 todoPage.addTodo(todo);
-                assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+                assertTrue(todoPage.getTodoTexts().contains(todo),
+                        "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
             }
 
             //      Practising data-driven parameterized test that groups several valid input types together with @CsvSource
@@ -119,14 +127,16 @@ public class TodoMVCReactTests {
                     "東京, Non-Latin characters"})
             public void shouldAcceptValidTodoText(String todo, String description) {
                 todoPage.addTodo(todo);
-                assertTrue(todoPage.getTodoTexts().contains(todo), "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
+                assertTrue(todoPage.getTodoTexts().contains(todo),
+                        "Expected Todo list to contain: " + todo + ", but it contained: " + todoPage.getTodoTexts());
             }
 
             @Test
             @Disabled("Blocked by ChromeDriver limitation: sendKeys does not support non-BMP Unicode characters")
             void shouldSupportEmoji() {
                 todoPage.addTodo("\uD83D\uDE00");
-                assertTrue(todoPage.getTodoTexts().contains("\uD83D\uDE00"), "Expected Todo list to contain '\uD83D\uDE00'");
+                assertTrue(todoPage.getTodoTexts().contains("\uD83D\uDE00"),
+                        "Expected Todo list to contain '\uD83D\uDE00'");
             }
 
         }
@@ -191,7 +201,8 @@ public class TodoMVCReactTests {
                 String todo = "Wrap birthday gift";
                 todoPage.addTodo(todo);
 
-                assertFalse(todoPage.isTodoCompleted(todo), "The todo: '" + todo + "' is already complete and shouldn't be.");
+                assertFalse(todoPage.isTodoCompleted(todo),
+                        "The todo: '" + todo + "' is already complete and shouldn't be.");
 
                 todoPage.completeTodo(todo);
                 todoPage.uncompleteTodo(todo);
@@ -266,9 +277,89 @@ public class TodoMVCReactTests {
                 todoPage.deleteTodo(firstTodo);
 
                 List<String> todoTextsAfterDeletion = todoPage.getTodoTexts();
-                assertFalse(todoTextsAfterDeletion.contains(firstTodo), "Expected deleted todo to be removed from the list");
-                assertEquals(1, todoTextsAfterDeletion.size(), "Expected exactly one todo to remain after deletion");
-                assertTrue(todoTextsAfterDeletion.contains(secondTodo), "Expected remaining todo to be '" + secondTodo + "'");
+                assertFalse(todoTextsAfterDeletion.contains(firstTodo),
+                        "Expected deleted todo to be removed from the list");
+                assertEquals(1, todoTextsAfterDeletion.size(),
+                        "Expected exactly one todo to remain after deletion");
+                assertTrue(todoTextsAfterDeletion.contains(secondTodo),
+                        "Expected remaining todo to be '" + secondTodo + "'");
+            }
+        }
+
+        @Nested
+        @DisplayName("Filtering todos")
+        class FilteringTodos {
+
+            @Test
+            void shouldFilterCompletedTodos() {
+                String completedTodo = "Bake cake";
+                String activeTodo = "Wash car";
+
+                todoPage.addTodo(completedTodo);
+                todoPage.addTodo(activeTodo);
+
+                todoPage.completeTodo(completedTodo);
+
+                todoPage.filterByCompleted();
+
+                List<String> todoTexts = todoPage.getTodoTexts();
+
+                assertTrue(todoTexts.contains(completedTodo),
+                        "Expected completed todo '" + completedTodo + "' to be visible");
+                assertFalse(todoTexts.contains(activeTodo),
+                        "Expected active todo '" + activeTodo + "' not to be visible");
+                assertEquals(1, todoTexts.size(),
+                        "Expected only completed todos to be visible");
+            }
+
+            @Test
+            void shouldFilterActiveTodos() {
+                String completedTodo = "Wrap birthday gift";
+                String activeTodo = "Wash car";
+
+                todoPage.addTodo(completedTodo);
+                todoPage.addTodo(activeTodo);
+
+                todoPage.completeTodo(completedTodo);
+                todoPage.filterByActive();
+
+                List<String> todoTexts = todoPage.getTodoTexts();
+
+                assertTrue(todoTexts.contains(activeTodo),
+                        "Expected active todo '" + activeTodo + "' to be visible");
+                assertFalse(todoTexts.contains(completedTodo),
+                        "Expected completed todo '" + completedTodo + "' not to be visible");
+                assertEquals(1, todoTexts.size(),
+                        "Expected only active todos to be visible");
+            }
+
+            @Test
+            void shouldShowAllTodosAfterRemovingFilter() {
+                String completedTodo = "Bake cake";
+                String activeTodo = "Make icing";
+
+                todoPage.addTodo(completedTodo);
+                todoPage.addTodo(activeTodo);
+
+                todoPage.completeTodo(completedTodo);
+
+                todoPage.filterByCompleted();
+
+                List<String> todoTexts = todoPage.getTodoTexts();
+
+                assertEquals(1, todoTexts.size(),
+                        "Expected only completed todos to be visible after applying Completed filter");
+
+                todoPage.filterByAll();
+
+                todoTexts = todoPage.getTodoTexts();
+
+                assertTrue(todoTexts.contains(completedTodo),
+                        "Expected completed todo '" + completedTodo + "' to be visible after returning to All filter");
+                assertTrue(todoTexts.contains(activeTodo),
+                        "Expected active todo '" + activeTodo + "' to be visible after returning to All filter");
+                assertEquals(2, todoTexts.size(),
+                        "Expected all todos to be visible after returning to All filter");
             }
         }
 }
