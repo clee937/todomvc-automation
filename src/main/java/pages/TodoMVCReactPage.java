@@ -22,6 +22,7 @@ public class TodoMVCReactPage {
     private final By completedFilterLocator = By.cssSelector("a[href='#/completed']");
     private final By activeFilterLocator = By.cssSelector("a[href='#/active']");
     private final By allFilterLocator = By.cssSelector("a[href='#/']");
+    private final By clearCompletedLocator = By.cssSelector(".clear-completed");
     private static final String URL =
             "https://todomvc.com/examples/react/dist/";
 
@@ -98,6 +99,10 @@ public class TodoMVCReactPage {
 
     }
 
+    public void clearCompletedTodos() {
+        driver.findElement(clearCompletedLocator).click();
+    }
+
     public void filterByCompleted() {
         driver.findElement(completedFilterLocator).click();
     }
@@ -138,6 +143,11 @@ public class TodoMVCReactPage {
         String cssClasses = todoItem.getAttribute("class");
 
         return cssClasses != null && cssClasses.contains("completed");
+    }
+
+    public boolean isClearCompletedButtonVisible() {
+        List<WebElement> buttons = driver.findElements(clearCompletedLocator);
+        return !buttons.isEmpty() && buttons.get(0).isDisplayed();
     }
 
     // ---------- Helpers ----------
