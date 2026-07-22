@@ -23,6 +23,7 @@ public class TodoMVCReactPage {
     private final By activeFilterLocator = By.cssSelector("a[href='#/active']");
     private final By allFilterLocator = By.cssSelector("a[href='#/']");
     private final By clearCompletedLocator = By.cssSelector(".clear-completed");
+    private final By todoCountLocator = By.cssSelector(".todo-count");
     private static final String URL =
             "https://todomvc.com/examples/react/dist/";
 
@@ -137,6 +138,16 @@ public class TodoMVCReactPage {
         return getTodoTexts().size();
     }
 
+    public int getRemainingTodoCount() {
+        WebElement todoCount = driver.findElement(todoCountLocator);
+
+        String todoCountText = todoCount.getText();
+
+        String[] parts = todoCountText.split(" ");
+
+        return Integer.parseInt(parts[0]);
+    }
+
     public boolean isTodoCompleted(String todo) {
         WebElement todoItem = getTodoItem(todo);
 
@@ -148,6 +159,11 @@ public class TodoMVCReactPage {
     public boolean isClearCompletedButtonVisible() {
         List<WebElement> buttons = driver.findElements(clearCompletedLocator);
         return !buttons.isEmpty() && buttons.get(0).isDisplayed();
+    }
+
+    public boolean isTodoCountVisible() {
+        List<WebElement> todoCounts = driver.findElements(todoCountLocator);
+        return !todoCounts.isEmpty() && todoCounts.get(0).isDisplayed();
     }
 
     // ---------- Helpers ----------
