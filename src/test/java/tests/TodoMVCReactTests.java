@@ -446,6 +446,23 @@ public class TodoMVCReactTests {
                 assertEquals(expectedRemaining, todoPage.getRemainingTodoCount(),
                         "Expected remaining todo count to be " + expectedRemaining);
             }
+
+            // Verify the status bar remains visible and displays 0 remaining todos when all todos are completed.
+            // This differs from having no todos, where the footer is hidden.
+            @Test
+            void shouldDisplayZeroRemainingTodoCountWhenAllTodosCompleted() {
+                String firstTodo = "Wash car";
+                String secondTodo = "Wash hair";
+
+                todoPage.addTodo(firstTodo);
+                todoPage.addTodo(secondTodo);
+
+                todoPage.completeTodo(firstTodo);
+                todoPage.completeTodo(secondTodo);
+
+                assertEquals(0, todoPage.getRemainingTodoCount(),
+                        "Expected remaining todo count to be 0");
+            }
         }
 }
 
