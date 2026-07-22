@@ -284,6 +284,22 @@ public class TodoMVCReactTests {
                 assertTrue(todoTextsAfterDeletion.contains(secondTodo),
                         "Expected remaining todo to be '" + secondTodo + "'");
             }
+
+            @Test
+            void shouldDeleteCompletedTodo() {
+                String completedTodo = "Write birthday card";
+
+                todoPage.addTodo(completedTodo);
+                todoPage.completeTodo(completedTodo);
+                todoPage.deleteTodo(completedTodo);
+
+                List<String> todoTextsAfterDeletion = todoPage.getTodoTexts();
+
+                assertFalse(todoTextsAfterDeletion.contains(completedTodo),
+                        "Expected completed todo '" + completedTodo + "' to be removed");
+                assertEquals(0, todoTextsAfterDeletion.size(),
+                        "Expected no todos to remain after deletion");
+            }
         }
 
         @Nested
