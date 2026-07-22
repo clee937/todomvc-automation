@@ -408,5 +408,41 @@ public class TodoMVCReactTests {
                         "Expected all todos to be visible after returning to All filter");
             }
         }
+
+        @Nested
+        @DisplayName("Status bar")
+        class StatusBar {
+
+            @Test
+            void shouldShowRemainingTodoCount() {
+                String todo = "Wash car";
+
+                todoPage.addTodo(todo);
+
+                assertTrue(todoPage.isTodoCountVisible(),
+                        "Expected todo count to be visible");
+            }
+
+            @Test
+            void shouldNotShowRemainingTodoCountWhenNoTodosExist() {
+                assertFalse(todoPage.isTodoCountVisible(),
+                        "Expected todo count not to be visible when no todos exist");
+            }
+
+            @Test
+            void shouldDisplayCorrectRemainingTodoCount() {
+                String activeTodo1 = "Wash car";
+                String activeTodo2 = "Wash hair";
+                String completedTodo = "Wash dog";
+
+                todoPage.addTodo(activeTodo1);
+                todoPage.addTodo(activeTodo2);
+                todoPage.addTodo(completedTodo);
+                todoPage.completeTodo(completedTodo);
+
+                assertEquals(2, todoPage.getRemainingTodoCount(),
+                        "Expected 2 todos to be remaining in the todo count");
+            }
+        }
 }
 
