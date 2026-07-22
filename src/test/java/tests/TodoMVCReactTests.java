@@ -429,19 +429,22 @@ public class TodoMVCReactTests {
                         "Expected todo count not to be visible when no todos exist");
             }
 
-            @Test
-            void shouldDisplayCorrectRemainingTodoCount() {
-                String activeTodo1 = "Wash car";
-                String activeTodo2 = "Wash hair";
-                String completedTodo = "Wash dog";
+            @ParameterizedTest
+            @CsvSource({
+                    "1, 0, 1",
+                    "3, 1, 2"
+            })
+            void shouldDisplayCorrectRemainingTodoCount(int totalTodos, int completedTodos, int expectedRemaining) {
+                for (int i = 1; i <= totalTodos; i++) {
+                    todoPage.addTodo("Todo " + i);
+                }
 
-                todoPage.addTodo(activeTodo1);
-                todoPage.addTodo(activeTodo2);
-                todoPage.addTodo(completedTodo);
-                todoPage.completeTodo(completedTodo);
+                for (int i = 1; i <= completedTodos; i++) {
+                    todoPage.completeTodo("Todo " + i);
+                }
 
-                assertEquals(2, todoPage.getRemainingTodoCount(),
-                        "Expected 2 todos to be remaining in the todo count");
+                assertEquals(expectedRemaining, todoPage.getRemainingTodoCount(),
+                        "Expected remaining todo count to be " + expectedRemaining);
             }
         }
 }
