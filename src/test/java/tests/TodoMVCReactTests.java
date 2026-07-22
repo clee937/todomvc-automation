@@ -254,7 +254,7 @@ public class TodoMVCReactTests {
         @DisplayName("Deleting todos")
         class DeletingTodos {
             @Test
-            void shouldDeleteTodo() {
+            void shouldDeleteActiveTodo() {
                 String todo = "Write birthday card";
                 todoPage.addTodo(todo);
                 todoPage.deleteTodo(todo);
